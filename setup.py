@@ -101,13 +101,13 @@ else:
 
 
 # use Cython to generate the C code (_proj.c) from _proj.pyx
-if USE_CYTHON:
-    try:
-        from Cython.Build import cythonize
-    except ImportError:
-        def cythonize(*args, **kwargs):
-            from Cython.Build import cythonize
-            return cythonize(*args, **kwargs)
+# if USE_CYTHON:
+#     try:
+#         from Cython.Build import cythonize
+#     except ImportError:
+#         def cythonize(*args, **kwargs):
+#             from Cython.Build import cythonize
+#             return cythonize(*args, **kwargs)
         # sys.stderr.write("\n\n_proj.c does not exist in a repository copy.\n"
         #                  "ImportError: Cython must be installed in order to generate _proj.c\n"
         #                  "\tto install Cython run `pip install cython`\n")
@@ -160,7 +160,7 @@ Optimized for numpy arrays.""",
                        "Operating System :: OS Independent"],
   packages          = packages,
   package_dir       = package_dirs,
-  ext_modules       = cythonize(extensions),
   package_data      = package_data,
-  setup_requires    = ['Cython']
-  )
+  setup_requires    = ['cython', 'setuptools>=18.0'],
+  ext_modules = extensions,
+)
