@@ -105,12 +105,15 @@ if USE_CYTHON:
     try:
         from Cython.Build import cythonize
     except ImportError:
-        sys.stderr.write("\n\n_proj.c does not exist in a repository copy.\n"
-                         "ImportError: Cython must be installed in order to generate _proj.c\n"
-                         "\tto install Cython run `pip install cython`\n")
-        sys.exit(1)
+        def cythonize(*args, **kwargs):
+            from Cython.Build import cythonize
+            return cythonize(*args, **kwargs)
+        # sys.stderr.write("\n\n_proj.c does not exist in a repository copy.\n"
+        #                  "ImportError: Cython must be installed in order to generate _proj.c\n"
+        #                  "\tto install Cython run `pip install cython`\n")
+        # sys.exit(1)
 
-    extensions = cythonize(extensions)
+    # extensions = cythonize(extensions)
 
 
 # retreive pyproj version information (stored in _proj.pyx) in version variable
@@ -157,6 +160,7 @@ Optimized for numpy arrays.""",
                        "Operating System :: OS Independent"],
   packages          = packages,
   package_dir       = package_dirs,
-  ext_modules       = extensions,
-  package_data      = package_data
+  ext_modules       = cythonize(extensions),
+  package_data      = package_data,
+  setup_requires    = ['Cython']
   )
